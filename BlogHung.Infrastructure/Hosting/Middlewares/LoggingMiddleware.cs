@@ -38,6 +38,10 @@ namespace BlogHung.Infrastructure.Hosting.Middlewares
                 }
                 LoggingHelper.SetProperty("CorrelationId", requestId.ToString());
 
+                // Lấy địa chỉ IP của client từ HttpContext
+                string? ipAddress = context?.Connection?.RemoteIpAddress?.ToString();
+                LoggingHelper.SetProperty("IpAddress", ipAddress ?? string.Empty);
+
                 if (context.Request.ContentType != null &&
                     allowedContentType.Any(x => context.Request.ContentType.Trim().Replace(" ", "").Contains(x, StringComparison.OrdinalIgnoreCase)))
                 {

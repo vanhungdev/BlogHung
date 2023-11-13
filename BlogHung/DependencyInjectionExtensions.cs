@@ -2,12 +2,39 @@
 using BlogHung.Infrastructure.Configuration;
 using BlogHung.Infrastructure.Utilities;
 using BlogHung.Infrastructure.Logging;
+using BlogHung.Infrastructure.CoreConsts;
 
 namespace BlogHung
 {
     public static class DependencyInjectionExtensions
     {
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddHttpClientServicesCallApi(this IServiceCollection services)
+        {
+            /*services.AddTransient<ChatClientClientDelegatingHandler>();
+
+            services.AddHttpClient(HttpClientName.ChatServer, client =>
+            {
+                client.BaseAddress = new Uri("http://14.225.192.203/");
+                client.Timeout = TimeSpan.FromSeconds(20);
+            }).AddHttpMessageHandler<ChatClientClientDelegatingHandler>();*/
+
+            return services;
+        }
+
+        public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services, IConfiguration Configuration)
+        {
+            services.AddSingleton<ICoreHttpClient, CoreHttpClient>();
+            services.Configure<AppSettings>(Configuration.GetSection(nameof(AppSettings)));
+            services.AddHttpClientServices();
+            return services;
+        }
 
         /// <summary>
         /// 
@@ -33,7 +60,7 @@ namespace BlogHung
             AppSettingServices.Services = app.ApplicationServices;
             CoreUtility.ConfigureContextAccessor(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
             LoggingHelper.Config(app.ApplicationServices.GetRequiredService<IDiagnosticContext>());
-            //CoreUtility.ConfigureHttpClientFactory(app.ApplicationServices.GetRequiredService<IHttpClientFactory>());
+            CoreUtility.ConfigureHttpClientFactory(app.ApplicationServices.GetRequiredService<IHttpClientFactory>());
 
             app.UseSerilogRequestLogging(opts =>
             {

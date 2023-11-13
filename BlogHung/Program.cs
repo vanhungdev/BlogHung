@@ -2,7 +2,6 @@ using BlogHung;
 using BlogHung.Infrastructure.Extensions;
 using BlogHung.Infrastructure.Hosting.Middlewares;
 using Serilog;
-using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -15,11 +14,25 @@ IWebHostEnvironment env = builder.Environment;
 
 builder.Services.AddHttpServices();
 builder.Services.AddScoped<LogModelDataAttribute>();
+builder.Services.AddInfrastructureLayer(configuration);
+builder.Services.AddHttpClientServicesCallApi();
 
-//builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddCors(options =>
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("CorsPolicy",
+            builder => builder.AllowAnyOrigin()
+                              .AllowAnyMethod()
+                              .AllowAnyHeader()
+                              .AllowCredentials());
+    });
+});
+
+
 var app = builder.Build();
 app.AddCoreInfrastructureLayer(env);
-
+app.AddInfrastructureLayer(env);
 
 
 // Configure the HTTP request pipeline.

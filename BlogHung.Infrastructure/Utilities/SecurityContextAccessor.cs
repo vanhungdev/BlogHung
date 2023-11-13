@@ -48,7 +48,7 @@ namespace BlogHung.Infrastructure.Utilities
             {
                 try
                 {
-                    string accountName = _context.User?.FindFirstValue(CoreConsts.CoreConsts.ClaimAccountName);
+                    string? accountName = _context.User?.FindFirstValue(CoreConsts.CoreConsts.ClaimAccountName);
                     if (string.IsNullOrWhiteSpace(accountName))
                     {
                         throw new CoreException("account_name empty");
@@ -76,7 +76,7 @@ namespace BlogHung.Infrastructure.Utilities
             {
                 try
                 {
-                    string accountName = _context.User?.FindFirstValue(CoreConsts.CoreConsts.ClaimIdToken);
+                    string? accountName = _context.User?.FindFirstValue(CoreConsts.CoreConsts.ClaimIdToken);
                     if (string.IsNullOrWhiteSpace(accountName))
                     {
                         throw new CoreException("account_jid_empty");
