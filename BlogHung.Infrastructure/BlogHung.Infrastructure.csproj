@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -34,5 +34,10 @@
 		<PackageReference Include="Serilog.Expressions" Version="3.2.0" />
 		<PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
 
+		<PackageReference Include="StackExchange.Redis" Version="2.6.48" />
+		<PackageReference Include="MongoDB.Driver" Version="2.17.0" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+		<PackageReference Include="Dapper" Version="2.0.78" />
+		
 	</ItemGroup>
 </Project>

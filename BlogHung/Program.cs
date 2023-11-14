@@ -4,30 +4,17 @@ using BlogHung.Infrastructure.Hosting.Middlewares;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
-builder.Services.AddControllersWithViews();
 builder.Host.UseSerilog();
+builder.Services.AddControllersWithViews();
 
-
-ConfigurationManager configuration = builder.Configuration; // allows both to access and to set up the config
+ConfigurationManager configuration = builder.Configuration;
 IWebHostEnvironment env = builder.Environment;
 
+
+builder.Services.AddInfrastructureLayer(configuration);
 builder.Services.AddHttpServices();
 builder.Services.AddScoped<LogModelDataAttribute>();
-builder.Services.AddInfrastructureLayer(configuration);
 builder.Services.AddHttpClientServicesCallApi();
-
-builder.Services.AddCors(options =>
-{
-    builder.Services.AddCors(options =>
-    {
-        options.AddPolicy("CorsPolicy",
-            builder => builder.AllowAnyOrigin()
-                              .AllowAnyMethod()
-                              .AllowAnyHeader()
-                              .AllowCredentials());
-    });
-});
 
 
 var app = builder.Build();
@@ -43,7 +30,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-//app.AddCoreInfrastructureLayer(env);
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseMiddleware<LoggingMiddleware>();

@@ -2,7 +2,7 @@
 using BlogHung.Infrastructure.Configuration;
 using BlogHung.Infrastructure.Utilities;
 using BlogHung.Infrastructure.Logging;
-using BlogHung.Infrastructure.CoreConsts;
+using BlogHung.Infrastructure.Database;
 
 namespace BlogHung
 {
@@ -17,6 +17,8 @@ namespace BlogHung
         /// <returns></returns>
         public static IServiceCollection AddHttpClientServicesCallApi(this IServiceCollection services)
         {
+            services.AddSingleton<IMongoDbContext, MongoDbContext>();
+            services.AddSingleton<IQuery, SqlServer>();
             /*services.AddTransient<ChatClientClientDelegatingHandler>();
 
             services.AddHttpClient(HttpClientName.ChatServer, client =>
@@ -57,7 +59,6 @@ namespace BlogHung
         public static IApplicationBuilder AddCoreInfrastructureLayer(this IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.ApplicationServices.CreateLoggerConfiguration(env);
-            AppSettingServices.Services = app.ApplicationServices;
             CoreUtility.ConfigureContextAccessor(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
             LoggingHelper.Config(app.ApplicationServices.GetRequiredService<IDiagnosticContext>());
             CoreUtility.ConfigureHttpClientFactory(app.ApplicationServices.GetRequiredService<IHttpClientFactory>());
