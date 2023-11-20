@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
 builder.Services.AddControllersWithViews();
 
+
 ConfigurationManager configuration = builder.Configuration;
 IWebHostEnvironment env = builder.Environment;
 
@@ -18,9 +19,7 @@ builder.Services.AddHttpServices();
 builder.Services.AddScoped<LogModelDataAttribute>();
 builder.Services.AddHttpClientServicesCallApi();
 
-services.AddSingleton<IBus>(_ => RabbitHutch.CreateBus("host=localhost", register => register.RegisterKafka()));
-builder.Services.AddSingleton<MessageConsumer>();
-builder.Services.AddHostedService<MessageConsumer>(provider => provider.GetRequiredService<MessageConsumer>());
+builder.Services.AddHostedService<MessageConsumer>();
 
 var app = builder.Build();
 app.AddCoreInfrastructureLayer(env);
