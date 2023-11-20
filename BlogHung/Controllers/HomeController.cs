@@ -23,6 +23,22 @@ namespace BlogHung.Controllers
 
         public IActionResult Index(int id = 1)
         {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
          /*   LoggingHelper.SetProperty("ResponseData", "123!");*/
             return View();
         }

@@ -1,6 +1,8 @@
 using BlogHung;
+using BlogHung.Application.BackgroudTaskService;
 using BlogHung.Infrastructure.Extensions;
 using BlogHung.Infrastructure.Hosting.Middlewares;
+using EasyNetQ;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +18,9 @@ builder.Services.AddHttpServices();
 builder.Services.AddScoped<LogModelDataAttribute>();
 builder.Services.AddHttpClientServicesCallApi();
 
+services.AddSingleton<IBus>(_ => RabbitHutch.CreateBus("host=localhost", register => register.RegisterKafka()));
+builder.Services.AddSingleton<MessageConsumer>();
+builder.Services.AddHostedService<MessageConsumer>(provider => provider.GetRequiredService<MessageConsumer>());
 
 var app = builder.Build();
 app.AddCoreInfrastructureLayer(env);
