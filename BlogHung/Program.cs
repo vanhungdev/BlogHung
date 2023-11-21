@@ -1,8 +1,9 @@
-using BlogHung;
+﻿using BlogHung;
 using BlogHung.Application.BackgroudTaskService;
+using BlogHung.Application.OrderProcess;
 using BlogHung.Infrastructure.Extensions;
 using BlogHung.Infrastructure.Hosting.Middlewares;
-using EasyNetQ;
+using BlogHung.Infrastructure.Kafka.Consumers.KafkaManager;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,18 +14,19 @@ builder.Services.AddControllersWithViews();
 ConfigurationManager configuration = builder.Configuration;
 IWebHostEnvironment env = builder.Environment;
 
-
 builder.Services.AddInfrastructureLayer(configuration);
 builder.Services.AddHttpServices();
 builder.Services.AddScoped<LogModelDataAttribute>();
 builder.Services.AddHttpClientServicesCallApi();
 
+
+builder.Services.AddSingleton<KafkaConsumerManager>();
 builder.Services.AddHostedService<MessageConsumer>();
+builder.Services.AddSingleton<IOrderProcess, OrderProcess>();
 
 var app = builder.Build();
 app.AddCoreInfrastructureLayer(env);
 app.AddInfrastructureLayer(env);
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

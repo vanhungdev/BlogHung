@@ -1,27 +1,58 @@
-﻿using BlogHung.Infrastructure.Utilities;
-using Confluent.Kafka;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Confluent.Kafka;
 
 namespace BlogHung.Infrastructure.Kafka
 {
-    public class Kafka
+    public class Kafka : IKafka
     {
-        public static ConsumerConfig Config { get; }
-        public static readonly string Topic = "quickstart-events";
+        private readonly Func<string, Task> _messageHandler;
+        private readonly ConsumerConfig _kafkaConfig;
 
-        static Kafka()
+        public Kafka(Func<string, Task> messageHandler, ConsumerConfig kafkaConfig)
         {
-            var config = new ConsumerConfig
+            _messageHandler = messageHandler;
+            _kafkaConfig = kafkaConfig;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="topic"></param>
+        /// <param name="stoppingToken"></param>
+        /// <returns></returns>
+        public async Task StartConsuming(string topic, CancellationToken stoppingToken)
+        {
+            // Tạm thời chưa ghi log
+            using (var consumer = new ConsumerBuilder<Ignore, string>(_kafkaConfig).Build())
             {
-                BootstrapServers = "localhost:9092",
-/*                EnableAutoCommit = false,
-                AutoOffsetReset = AutoOffsetReset.Earliest*/
-            };
-            Config = config;
+                consumer.Subscribe(topic);
+                try
+                {
+                    while (!stoppingToken.IsCancellationRequested)
+                    {
+                        var consumeResult = consumer.Consume(stoppingToken);
+                        string messageValue = consumeResult.Message.Value;
+
+                        if (!string.IsNullOrEmpty(messageValue))
+                        {
+                            await _messageHandler(messageValue);
+                            consumer.Commit(consumeResult);
+                        }
+                    }
+                }
+                catch (OperationCanceledException oe)
+                {
+                    string exceptionMessage = oe.Message;
+                }
+                finally
+                {
+                    consumer.Close();
+                }
+            }
+        }
+
+        public Task StopConsuming(CancellationToken stoppingToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

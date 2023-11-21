@@ -1,55 +1,38 @@
-﻿using BlogHung.Infrastructure.Kafka;
-using BlogHung.Infrastructure.Logging;
-using BlogHung.Infrastructure.Models;
-using BlogHung.Infrastructure.Utilities;
-using Confluent.Kafka;
-using EasyNetQ;
+﻿using BlogHung.Application.OrderProcess;
+using BlogHung.Infrastructure.Kafka;
+using BlogHung.Infrastructure.Kafka.Consumers.KafkaManager;
 using Microsoft.Extensions.Hosting;
 
 namespace BlogHung.Application.BackgroudTaskService
 {
     public class MessageConsumer : BackgroundService
     {
-        
+        private readonly KafkaConsumerManager _consumerManager;
+        private readonly IOrderProcess _orderProcess;
+
+        public MessageConsumer(KafkaConsumerManager consumerManager, IOrderProcess orderProcess)
+        {
+            _consumerManager = consumerManager;
+            _orderProcess = orderProcess;
+        }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            try
-            {
-                using (var consumer = new ConsumerBuilder<Ignore, string>(Kafka.Config).Build())
-                {
-                    consumer.Subscribe(Kafka.Topic);
+            var topic1 = "events1";
+            var topic2 = "events2";
 
-                    try
-                    {
-                        while (!stoppingToken.IsCancellationRequested)
-                        {
-                            var consumeResult = consumer.Consume(stoppingToken);
-                            string mesValue = consumeResult.Message.Value;
-                            if (!string.IsNullOrEmpty(mesValue))
-                            {
-                                consumer.Commit(consumeResult);
-                            }
-                        }
-                    }
-                    catch (OperationCanceledException oe) //cancellationToken is cancel
-                    {
-                        string exx = oe.Message;
-                    }
-                    finally
-                    {
-                        consumer.Close();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                string exx2 = ex.Message;
-            }
+            _consumerManager.AddConsumer(topic1, async message => _orderProcess.CreateOrderProcess(message, topic1), KafkaConfiguration.Config); // Configuration can be changed
+            _consumerManager.AddConsumer(topic2, async message => MessageProcess2(message, topic2), KafkaConfiguration.Config); // Configuration can be changed
+            await _consumerManager.StartAllConsumersAsync(stoppingToken); // Start parallel
         }
-        private void HandleMessage(MyMessage message)
+
+        /// <summary>
+        /// Test
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="topic"></param>
+        public static void MessageProcess2(string message, string topic)
         {
-            Console.WriteLine($"Received message: {message.Content}");
-            // Handle the message as needed
+            Console.WriteLine($"Received message from {topic}: {message}");
         }
     }
 }
