@@ -1,6 +1,11 @@
 ﻿using BlogHung.Infrastructure.Database;
 using BlogHung.Infrastructure.Hosting.Middlewares;
+using BlogHung.Infrastructure.Kafka;
+using BlogHung.Infrastructure.Kafka.Producer;
+using BlogHung.Infrastructure.Utilities;
 using BlogHung.Models;
+using Confluent.Kafka;
+using EasyNetQ;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MongoDB.Driver;
@@ -15,31 +20,41 @@ namespace BlogHung.Controllers
     {
         private readonly Infrastructure.Database.IQuery _query;
         private readonly IMongoDbContext _mongoDbContext;
-        public HomeController(IMongoDbContext mongoDbContext, Infrastructure.Database.IQuery query)
+        private readonly IKafkaProducer _messageBroker;
+        public HomeController(IMongoDbContext mongoDbContext, Infrastructure.Database.IQuery query, IKafkaProducer messageBroker)
         {
             _mongoDbContext = mongoDbContext;
             _query = query;
+            _messageBroker = messageBroker;
         }
 
-        public IActionResult Index(int id = 1)
+        public async Task<IActionResult> IndexAsync(int id = 1)
         {
 
+            var config1 = new ProducerConfig
+            {
+                BootstrapServers = "localhost:9092"
+            };
 
+            Task task1 = Task.Run(async () =>
+            {
+                for (int i = 1; i <= 3000; i++)
+                {
+                    var messageBroker1 = await _messageBroker.ProducePushMessage("events1", config1, new Message<Null, string> { Value = $"message: {i}" });
+                }
+            });
 
+            Task task2 = Task.Run(async () =>
+            {
+                for (int j = 1; j <= 3000; j++)
+                {
+                    var messageBroker2 = await _messageBroker.ProducePushMessage("events2", config1, new Message<Null, string> { Value = $"message: {j}" });
+                }
+            });
 
+            await Task.WhenAll(task1, task2);
 
-
-
-
-
-
-
-
-
-
-
-
-         /*   LoggingHelper.SetProperty("ResponseData", "123!");*/
+            /*   LoggingHelper.SetProperty("ResponseData", "123!");*/
             return View();
         }
 

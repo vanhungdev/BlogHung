@@ -3,7 +3,9 @@ using BlogHung.Application.BackgroudTaskService;
 using BlogHung.Application.OrderProcess;
 using BlogHung.Infrastructure.Extensions;
 using BlogHung.Infrastructure.Hosting.Middlewares;
-using BlogHung.Infrastructure.Kafka.Consumers.KafkaManager;
+using BlogHung.Infrastructure.Kafka;
+using BlogHung.Infrastructure.Kafka.Consumer;
+using BlogHung.Infrastructure.Kafka.Producer;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,10 +21,11 @@ builder.Services.AddHttpServices();
 builder.Services.AddScoped<LogModelDataAttribute>();
 builder.Services.AddHttpClientServicesCallApi();
 
-
 builder.Services.AddSingleton<KafkaConsumerManager>();
 builder.Services.AddHostedService<MessageConsumer>();
 builder.Services.AddSingleton<IOrderProcess, OrderProcess>();
+builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
+
 
 var app = builder.Build();
 app.AddCoreInfrastructureLayer(env);

@@ -1,6 +1,6 @@
 ﻿using BlogHung.Application.OrderProcess;
 using BlogHung.Infrastructure.Kafka;
-using BlogHung.Infrastructure.Kafka.Consumers.KafkaManager;
+using BlogHung.Infrastructure.Kafka.Consumer;
 using Microsoft.Extensions.Hosting;
 
 namespace BlogHung.Application.BackgroudTaskService

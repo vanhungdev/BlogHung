@@ -1,13 +1,13 @@
 ﻿using Confluent.Kafka;
 
-namespace BlogHung.Infrastructure.Kafka.Consumers
+namespace BlogHung.Infrastructure.Kafka.Consumer
 {
     public class KafkaConsumerManager
     {
-        private readonly Dictionary<string, IKafka> _consumers;
+        private readonly Dictionary<string, IKafkaConsumer> _consumers;
         public KafkaConsumerManager()
         {
-            _consumers = new Dictionary<string, IKafka>();
+            _consumers = new Dictionary<string, IKafkaConsumer>();
         }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace BlogHung.Infrastructure.Kafka.Consumers
         {
             if (!_consumers.ContainsKey(topic))
             {
-                var consumer = new Kafka(messageHandler, config);
+                var consumer = new KafkaConsumer(messageHandler, config);
                 _consumers.Add(topic, consumer);
             }
         }

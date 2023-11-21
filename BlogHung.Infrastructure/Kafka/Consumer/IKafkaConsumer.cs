@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlogHung.Infrastructure.Kafka
+namespace BlogHung.Infrastructure.Kafka.Consumer
 {
-    public interface IKafka
+    public interface IKafkaConsumer
     {
         /// <summary>
         /// Start a consumer

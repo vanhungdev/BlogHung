@@ -1,13 +1,13 @@
 ﻿using Confluent.Kafka;
 
-namespace BlogHung.Infrastructure.Kafka
+namespace BlogHung.Infrastructure.Kafka.Consumer
 {
-    public class Kafka : IKafka
+    public class KafkaConsumer : IKafkaConsumer
     {
         private readonly Func<string, Task> _messageHandler;
         private readonly ConsumerConfig _kafkaConfig;
 
-        public Kafka(Func<string, Task> messageHandler, ConsumerConfig kafkaConfig)
+        public KafkaConsumer(Func<string, Task> messageHandler, ConsumerConfig kafkaConfig)
         {
             _messageHandler = messageHandler;
             _kafkaConfig = kafkaConfig;
