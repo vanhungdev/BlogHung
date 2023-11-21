@@ -22,7 +22,7 @@ namespace BlogHung.Application.BackgroudTaskService
 
             _consumerManager.AddConsumer(topic1, async message => _orderProcess.CreateOrderProcess(message, topic1), KafkaConfiguration.Config); // Configuration can be changed
             _consumerManager.AddConsumer(topic2, async message => MessageProcess2(message, topic2), KafkaConfiguration.Config); // Configuration can be changed
-            await _consumerManager.StartAllConsumersAsync(stoppingToken); // Start parallel
+            //await _consumerManager.StartAllConsumersAsync(stoppingToken); // Start parallel
         }
 
         /// <summary>

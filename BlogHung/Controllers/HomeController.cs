@@ -38,7 +38,7 @@ namespace BlogHung.Controllers
 
             Task task1 = Task.Run(async () =>
             {
-                for (int i = 1; i <= 3000; i++)
+                for (int i = 1; i <= 200; i++)
                 {
                     var messageBroker1 = await _messageBroker.ProducePushMessage("events1", config1, new Message<Null, string> { Value = $"message: {i}" });
                 }
@@ -46,13 +46,37 @@ namespace BlogHung.Controllers
 
             Task task2 = Task.Run(async () =>
             {
-                for (int j = 1; j <= 3000; j++)
+                for (int j = 1; j <= 200; j++)
                 {
                     var messageBroker2 = await _messageBroker.ProducePushMessage("events2", config1, new Message<Null, string> { Value = $"message: {j}" });
                 }
             });
 
-            await Task.WhenAll(task1, task2);
+            Task task3 = Task.Run(async () =>
+            {
+                for (int i = 1; i <= 200; i++)
+                {
+                    var messageBroker1 = await _messageBroker.ProducePushMessage("events3", config1, new Message<Null, string> { Value = $"message: {i}" });
+                }
+            });
+
+            Task task4 = Task.Run(async () =>
+            {
+                for (int j = 1; j <= 200; j++)
+                {
+                    var messageBroker2 = await _messageBroker.ProducePushMessage("events4", config1, new Message<Null, string> { Value = $"message: {j}" });
+                }
+            });
+
+            Task task5 = Task.Run(async () =>
+            {
+                for (int i = 1; i <= 200; i++)
+                {
+                    var messageBroker2 = await _messageBroker.ProducePushMessage("events5", config1, new Message<Null, string> { Value = $"message: {i}" });
+                }
+            });
+
+            await Task.WhenAll(task1, task2, task3, task3, task4, task5);
 
             /*   LoggingHelper.SetProperty("ResponseData", "123!");*/
             return View();
