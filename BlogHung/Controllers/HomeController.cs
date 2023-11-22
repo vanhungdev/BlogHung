@@ -33,7 +33,7 @@ namespace BlogHung.Controllers
 
             var config1 = new ProducerConfig
             {
-                BootstrapServers = "localhost:9092"
+                BootstrapServers = "34.171.40.194:9092"
             };
 
             Task task1 = Task.Run(async () =>
@@ -76,7 +76,7 @@ namespace BlogHung.Controllers
                 }
             });
 
-            await Task.WhenAll(task1, task2, task3, task3, task4, task5);
+            await Task.WhenAll(task1, task2, task3, task4, task5);
 
             /*   LoggingHelper.SetProperty("ResponseData", "123!");*/
             return View();
