@@ -2,6 +2,7 @@
 using BlogHung.Infrastructure.Hosting.Middlewares;
 using BlogHung.Infrastructure.Kafka;
 using BlogHung.Infrastructure.Kafka.Producer;
+using BlogHung.Infrastructure.Models;
 using BlogHung.Infrastructure.Utilities;
 using BlogHung.Models;
 using Confluent.Kafka;
@@ -36,47 +37,26 @@ namespace BlogHung.Controllers
                 BootstrapServers = "34.171.40.194:9092"
             };
 
-            Task task1 = Task.Run(async () =>
+            // Tạo list các topic cần ghi
+            var topics = new List<string>() { "events1", "events2", "events3", "events4", "events5" };
+
+            Parallel.For(0, topics.Count, i =>
             {
-                for (int i = 1; i <= 200; i++)
+                var topic = topics[i];
+                // Số lượng message cố định 
+                var numMessages = 200;
+
+                for (int j = 1; j <= numMessages; j++)
                 {
-                    var messageBroker1 = await _messageBroker.ProducePushMessage("events1", config1, new Message<Null, string> { Value = $"message: {i}" });
+                    var message = new Message<Null, string>
+                    {
+                        Value = $"message {j} for {topic}"
+                    };
+
+                    // Gọi hàm produce message theo từng topic
+                    _messageBroker.ProducePushMessage(topic, config1, message, message.Value);
                 }
             });
-
-            Task task2 = Task.Run(async () =>
-            {
-                for (int j = 1; j <= 200; j++)
-                {
-                    var messageBroker2 = await _messageBroker.ProducePushMessage("events2", config1, new Message<Null, string> { Value = $"message: {j}" });
-                }
-            });
-
-            Task task3 = Task.Run(async () =>
-            {
-                for (int i = 1; i <= 200; i++)
-                {
-                    var messageBroker1 = await _messageBroker.ProducePushMessage("events3", config1, new Message<Null, string> { Value = $"message: {i}" });
-                }
-            });
-
-            Task task4 = Task.Run(async () =>
-            {
-                for (int j = 1; j <= 200; j++)
-                {
-                    var messageBroker2 = await _messageBroker.ProducePushMessage("events4", config1, new Message<Null, string> { Value = $"message: {j}" });
-                }
-            });
-
-            Task task5 = Task.Run(async () =>
-            {
-                for (int i = 1; i <= 200; i++)
-                {
-                    var messageBroker2 = await _messageBroker.ProducePushMessage("events5", config1, new Message<Null, string> { Value = $"message: {i}" });
-                }
-            });
-
-            await Task.WhenAll(task1, task2, task3, task4, task5);
 
             /*   LoggingHelper.SetProperty("ResponseData", "123!");*/
             return View();

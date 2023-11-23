@@ -11,7 +11,7 @@ namespace BlogHung.Infrastructure.Kafka.Producer
 {
     public class KafkaProducer : IKafkaProducer
     {
-        public async Task<bool> ProducePushMessage(string topic, ProducerConfig config, object objRequest)
+        public async Task<bool> ProducePushMessage(string topic, ProducerConfig config, object objRequest, string val)
         {
             var log = new StringBuilder();
             using var producer = new ProducerBuilder<Null, string>(config).Build();
@@ -22,7 +22,7 @@ namespace BlogHung.Infrastructure.Kafka.Producer
                 var result = await producer.ProduceAsync(topic, message);
 
                 //log.AppendLine($"Input: {jsonObj}");
-                log.AppendLine($"Delivered: {JsonConvert.SerializeObject(result.Value)} to: {result.TopicPartitionOffset}");
+                log.AppendLine($"m: {val} to offset: {result.TopicPartitionOffset.Offset.Value}");
                 return true;
             }
             catch (ProduceException<Null, string> e)

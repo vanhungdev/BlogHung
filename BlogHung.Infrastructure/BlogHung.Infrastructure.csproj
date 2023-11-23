@@ -41,6 +41,7 @@
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
 		<PackageReference Include="Dapper" Version="2.0.78" />
 		
+		<PackageReference Include="Confluent.Kafka" Version="2.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>
