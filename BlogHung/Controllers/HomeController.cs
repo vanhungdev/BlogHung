@@ -38,13 +38,13 @@ namespace BlogHung.Controllers
             };
 
             // Tạo list các topic cần ghi
-            var topics = new List<string>() { "events1", "events2", "events3", "events4", "events5" };
+            var topics = new List<string>() { "events1" };
 
             Parallel.For(0, topics.Count, i =>
             {
                 var topic = topics[i];
                 // Số lượng message cố định 
-                var numMessages = 200;
+                var numMessages = 2000;
 
                 for (int j = 1; j <= numMessages; j++)
                 {
