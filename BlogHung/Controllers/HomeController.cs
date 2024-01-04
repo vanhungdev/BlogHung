@@ -2,6 +2,7 @@
 using BlogHung.Infrastructure.Hosting.Middlewares;
 using BlogHung.Infrastructure.Kafka;
 using BlogHung.Infrastructure.Kafka.Producer;
+using BlogHung.Infrastructure.Logging;
 using BlogHung.Infrastructure.Models;
 using BlogHung.Infrastructure.Utilities;
 using BlogHung.Models;
@@ -29,41 +30,14 @@ namespace BlogHung.Controllers
             _messageBroker = messageBroker;
         }
 
-        public async Task<IActionResult> IndexAsync(int id = 1)
+        public async Task<IActionResult> Index(int id = 1)
         {
-
-            var config1 = new ProducerConfig
-            {
-                BootstrapServers = "34.171.40.194:9092"
-            };
-
-            // Tạo list các topic cần ghi
-            var topics = new List<string>() { "events1" };
-
-            Parallel.For(0, topics.Count, i =>
-            {
-                var topic = topics[i];
-                // Số lượng message cố định 
-                var numMessages = 2000;
-
-                for (int j = 1; j <= numMessages; j++)
-                {
-                    var message = new Message<Null, string>
-                    {
-                        Value = $"message {j} for {topic}"
-                    };
-
-                    // Gọi hàm produce message theo từng topic
-                    _messageBroker.ProducePushMessage(topic, config1, message, message.Value);
-                }
-            });
-
-            /*   LoggingHelper.SetProperty("ResponseData", "123!");*/
+            LoggingHelper.SetProperty("ResponseData", "123!");
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> PrivacyAsync(Users users)
+        public async Task<IActionResult> Privacy(Users users)
         {
 
             //SQL

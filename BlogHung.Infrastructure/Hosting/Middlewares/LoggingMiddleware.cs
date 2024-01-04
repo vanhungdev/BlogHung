@@ -37,7 +37,7 @@ namespace BlogHung.Infrastructure.Hosting.Middlewares
                     context.Request.Headers.Add("CorrelationId", requestId);
                 }
                 LoggingHelper.SetProperty("CorrelationId", requestId.ToString());
-
+                LoggingHelper.SetProperty("RequestTime", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff"));
                 // Lấy địa chỉ IP của client từ HttpContext
                 string? ipAddress = context?.Connection?.RemoteIpAddress?.ToString();
                 LoggingHelper.SetProperty("IpAddress", ipAddress ?? string.Empty);
@@ -67,6 +67,7 @@ namespace BlogHung.Infrastructure.Hosting.Middlewares
                 {
                     await _next(context);
                 }
+                LoggingHelper.SetProperty("ResponseTime", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff"));
                 LoggingHelper.SetProperty("CustomLog", LoggingHelper.GetLogStep());
             }
             catch

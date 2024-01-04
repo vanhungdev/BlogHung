@@ -36,20 +36,20 @@ namespace BlogHung.Infrastructure.Logging
                 loggerConfig.WriteTo.Async(a => a.Console());
             }
 
-             if (1 == 1)
+            if (true)
             {
                 loggerConfig.WriteTo.File(
                     new CompactJsonFormatter(),
                     $"{Environment.CurrentDirectory}\\ErrorLogs\\log.txt",
                     rollingInterval: RollingInterval.Infinite); // Set rollingInterval to Infinite for a single file
 
-                /*  loggerConfig.WriteTo.Elasticsearch(
-                             new ElasticsearchSinkOptions(new Uri("http://103.130.215.219:9200"))
-                             {
-                                 IndexFormat = "pubd15",
-                                 ModifyConnectionSettings = conn =>
-                                 conn.BasicAuthentication("elastic", "57e3KYLIpVyh61S18KGs")
-                             });*/
+                loggerConfig.WriteTo.Elasticsearch(
+                                          new ElasticsearchSinkOptions(new Uri("http://34.16.204.104:9200"))
+                                          {
+                                              IndexFormat = "index1",
+                                              ModifyConnectionSettings = conn =>
+                                              conn.BasicAuthentication("elastic", "AxMJHsip_A2JE27WQ76B")
+                                          });
             }
 
             Log.Logger = loggerConfig.CreateLogger();
