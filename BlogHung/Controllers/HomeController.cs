@@ -1,4 +1,5 @@
-﻿using BlogHung.Infrastructure.Database;
+﻿using BlogHung.Application.Models;
+using BlogHung.Infrastructure.Database;
 using BlogHung.Infrastructure.Hosting.Middlewares;
 using BlogHung.Infrastructure.Kafka;
 using BlogHung.Infrastructure.Kafka.Producer;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MongoDB.Driver;
 using Nest;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -40,11 +42,23 @@ namespace BlogHung.Controllers
         public async Task<IActionResult> Privacy(Users users)
         {
 
+            try
+            {
+                var checkExist = await _query.QueryAsync<Post>(SqlConnectionString.DatabaseRead, "SELECT top 10 * FROM BlogHung..post(nolock)");
+                LoggingHelper.SetProperty("Exception:", JsonConvert.SerializeObject(checkExist));
+                return View("Privacy", checkExist);
+            }
+            catch (Exception ex)
+            {
+                LoggingHelper.SetProperty("Exception:", "123!");
+            }
             //SQL
-            var checkExist = await _query.QueryAsync<object>(SqlConnectionString.DatabaseRead,
-                "SELECT top 10 * FROM SalePlatform..SPF_Account(nolock)");
+            return Ok("Eror...");
 
-            //REDIS
+
+
+
+            /*//REDIS
             var key = "key";
             var dataRedis = await RedisConnection.GetDatabase().StringGetAsync(key);
             if (string.IsNullOrWhiteSpace(dataRedis))
@@ -56,8 +70,9 @@ namespace BlogHung.Controllers
             // MONGODB
             var filter = Builders<dynamic>.Filter.Empty;
             var ops = new List<FilterDefinition<dynamic>>();
-          /*  ops.Add(Builders<dynamic>.Filter.Where(x => x.ExtractText.Equals("123")));
-            filter = Builders<dynamic>.Filter.And(ops);*/
+            ops.Add(Builders<dynamic>.Filter.Where(x => x.ExtractText.Equals("123")));
+            filter = Builders<dynamic>.Filter.And(ops);
+
 
             var condition = _mongoDbContext.GetCollectionRead<dynamic>("saleplatform_policy_bot_flow");
             var result = await condition.FindAsync(filter);
@@ -65,11 +80,10 @@ namespace BlogHung.Controllers
 
 
             var s = Infrastructure.Utilities.Helper.Settings.ConnectionStringSettings.SqlServerConnect;
-
             var user = new Users();
             user.Id = 1;
-            user.Name = "Hung";
-            return View(user);
+            user.Name = "Hung";*/
+
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

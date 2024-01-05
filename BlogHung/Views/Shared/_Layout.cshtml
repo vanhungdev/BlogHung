@@ -1,49 +1,119 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BlogHung</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/BlogHung.styles.css" asp-append-version="true" />
+    <meta charset="utf-8">
+    <title>BlogHung.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="~/favicon.ico" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css">
+    <link href="~/public/css/style.css" rel="stylesheet">
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BlogHung</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+<body class="gray-bg">
+    <section>
+        <div class="zalo-chat contact-div" style="opacity: 80%;">
+            <a data-animate="fadeInDown" rel="noopener noreferrer" href="http://zalo.me/0377377794" target="_blank" data-animated="true">
+                <span class="text-white p-4">Chat Zalo <i class="fas fa-comment"></i></span>
+            </a>
+        </div>
+
+        <div class="fb-chat contact-div" style="opacity: 80%;">
+            <a target="_blank" href="https://www.messenger.com/t/hungdeptrai.NVH">
+                <span>Facebook Messenger <i class="fab fa-facebook-messenger"></i></span>
+            </a>
+        </div>
+
+        <div class="call-mobile contact-div" style="opacity: 80%;">
+            <a class="text-white p-4" id="callnowbutton" href="tel:0377377794">SDT Liên hệ: 03773.777.94 <i class="fas fa-phone-square"></i></a>
+        </div>
+
+    </section>
+    <div class="blog-single gray-bg">
+        <div class="container bg-white p-2">
+            <section>
+                <nav class="navbar navbar-expand-lg navbar-light bg-white article1">
+                    <a class="navbar-brand text-primary" href="#">BlogHung.com</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link font-weight-bold text-danger" style="font-size: 18px;" href="~/">Trang chủ <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link  font-weight-bold text-danger" style="font-size: 18px;" href="#">Liên hệ</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle font-weight-bold text-danger" style="font-size: 18px;" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Bài viết
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#">Công nghệ mới</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Dapr</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Load balancer</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle font-weight-bold text-danger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    DevOps
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#">Kubernetes</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Docker</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">SSH/VPS</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle font-weight-bold text-danger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Công nghệ
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#">Pub/Sub</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Elasticsearch</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Redis</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">MongoDB</a>
+                                </div>
+                            </li>
+                        </ul>
+                        <form class="form-inline my-2 my-lg-0">
+                            <input class="form-control mr-sm-2 text-primary" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                    </div>
+                </nav>
+            </section>
             @RenderBody()
-        </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - BlogHung - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class=footer" style="background-color: #fff;">
+        <div class="footer-bottom small py-3 border-top border-white border-opacity-10">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start py-1">
+                        <p class=" font-weight-bold float-left" style="font-size:16px;color: #fc5356;">© 2024 copyright by <a class="text-reset" href="#"><span sty>Nguyễn Hưng</span></a></p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end py-1">
+                        <ul class="nav justify-content-center justify-content-md-end list-unstyled footer-link-01 m-0 float-right">
+                            <li class="p-0 mx-3 ms-md-0 me-md-3"><a href="#" class="text-opacity-75" style="font-size:16px;color: #20247b;">Privace &amp; Policy</a></li>
+                            <li class="p-0 mx-3 ms-md-0 me-md-3"><a href="#" class="text-opacity-75" style="font-size:16px;color: #20247b;">Faq's</a></li>
+                            <li class="p-0 mx-3 ms-md-0 me-md-3"><a href="#" class="text-opacity-75" style="font-size:16px;color: #20247b;">Get a Quote</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
