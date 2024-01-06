@@ -16,6 +16,8 @@ builder.Services.AddControllersWithViews();
 ConfigurationManager configuration = builder.Configuration;
 IWebHostEnvironment env = builder.Environment;
 
+Console.WriteLine("Start app...");
+
 builder.Services.AddInfrastructureLayer(configuration);
 builder.Services.AddHttpServices();
 builder.Services.AddScoped<LogModelDataAttribute>();
@@ -43,11 +45,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseMiddleware<LoggingMiddleware>();
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+Console.WriteLine("Done start a...");
 app.Run();

@@ -10,7 +10,11 @@ WORKDIR /src
 
 # Copy csproj và restore các phụ thuộc
 COPY ["BlogHung/BlogHung.csproj", "BlogHung/"]
+COPY ["BlogHung.Application/BlogHung.Application.csproj", "BlogHung.Application/"]
+COPY ["BlogHung.Infrastructure/BlogHung.Infrastructure.csproj", "BlogHung.Infrastructure/"]
 RUN dotnet restore "BlogHung/BlogHung.csproj"
+RUN dotnet restore "BlogHung.Application/BlogHung.Application.csproj" 
+RUN dotnet restore "BlogHung.Infrastructure/BlogHung.Infrastructure.csproj"
 
 # Copy toàn bộ mã nguồn và build ứng dụng
 COPY . .
@@ -18,8 +22,8 @@ WORKDIR "/src/BlogHung"
 RUN dotnet build "BlogHung.csproj" -c Release -o /app/build
 
 # Build runtime image
-FROM build AS publish
-RUN dotnet publish "BlogHung.csproj" -c Release -o /app/publish /p:UseAppHost=false
+FROM build AS publish   
+RUN dotnet publish "BlogHung.csproj" -c Release -o /app/publish
 
 # Chọn hình ảnh cơ sở để chạy ứng dụng
 FROM base AS final
