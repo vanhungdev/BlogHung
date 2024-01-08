@@ -17,7 +17,7 @@ Bloghung là một dự án chia sẽ kinh nghiệm được phát triển một
 	Password: Provanhung77
 	```	
 	
-## Phần 2: Cài đặt Kafka bằng docker compose:  
+## Phần 1: Deploy ứng dụng .NET lên VPS:  
 
 **Để deploy được úng dụng .NET 7 lên chúng ta cần có các bước sau:**   
 
@@ -110,3 +110,44 @@ Lưu ý: nếu chạy ở local thì không cần `linux/amd64` cái này chỉ 
  ```bash
   docker run -p 44380:80 --name containerName vanhungdev/imageName:v.1.1 
  ```
+
+## Phần 2: Cấu hình reverse proxy, load Balance và SSL:  
+  Cài đặt nginx:  
+
+ ```bash
+    docker run -d -p 80:80 -p 443:443 --name nginx-proxy --privileged=true \
+	-e ENABLE_IPV6=true \
+	-v ~/nginx/vhost.d:/etc/nginx/vhost.d \
+	-v ~/nginx-certs:/etc/nginx/certs:ro \
+	-v ~/nginx-conf:/etc/nginx/conf.d \
+	-v ~/nginx-logs:/var/log/nginx \
+	-v /usr/share/nginx/html \
+	-v /var/run/docker.sock:/tmp/docker.sock:ro \
+	jwilder/nginx-proxy
+ ```
+
+  Tải chứng chỉ SSL cho nó:  
+
+ ```bash
+   docker run -d --privileged=true \
+	-v ~/nginx/vhost.d:/etc/nginx/vhost.d \
+	-v ~/nginx-certs:/etc/nginx/certs:rw \
+	-v /var/run/docker.sock:/var/run/docker.sock:ro \
+	--volumes-from nginx-proxy \
+	jrcs/letsencrypt-nginx-proxy-companion
+ ```
+Chú ý: volumes-from cho đúng với server nginx
+
+  Chạy web lên:  
+
+ ```bash
+   docker run -it -d --name containerName \
+	-e VIRTUAL_HOST="your-domain.vn" \
+	-e VIRTUAL_PORT=80 \
+	-e LETSENCRYPT_HOST="your-domain.vn" \
+	-e LETSENCRYPT_EMAIL="vanhungdev@fpt.com.vn" \
+	vanhungdev/imageName:v.1.1
+
+ ```
+
+Lưu ý: nếu muốn chạy 2 host độc lập thì chạy lại server api giống nhau đổi VIRTUAL_HOST và containerName.
