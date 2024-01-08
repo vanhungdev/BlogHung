@@ -28,14 +28,10 @@ Bloghung là một dự án chia sẽ kinh nghiệm được phát triển một
 
 **Tạo elastic network:**  
 
-  Elastic network:  
- 
  ```bash
   docker network create elastic
  ```
-**Cấu hình và tạo elastic-server container:**  
-
- Bỏ limit size của elasticsearch server
+**Bỏ limit size của elasticsearch server:**  
  
  ```bash
 sudo vim /etc/sysctl.conf
@@ -48,6 +44,7 @@ Sau khi cài xong chạy lệnh
 sudo sysctl -w vm.max_map_count=262144
  ```
 
+**Cấu hình và tạo elastic-server container:**  
   Tạo elastic-server container:  
  
  ```bash
