@@ -16,8 +16,56 @@ Bloghung là một dự án chia sẽ kinh nghiệm được phát triển một
 	Username: admin
 	Password: Provanhung77
 	```	
-	
-## Phần 1: Deploy ứng dụng .NET lên VPS:  
+## Phần 1: Cài đặt ELK Stack:  
+
+**Để cài được Elasticsearch, kibna chúng ta cần cài theo các bước sau:**   
+
+1. **Tạo elastic network** -cần thiết để kết nối elasticsearch với kibna.
+2. **Tạo elastic-server container** - Chúng ta sẽ chạy container elasticsearch trước.
+3. **Lấy password của tài khoản kibana_system** - cần lấy password của tk kibana_system vì kibana sẽ không kết nối với tk elastic.
+4. **Chạy kibna container** - chúng ta cần chạy kiban container.
+5. **Lấy code từ log kibana và kết nối với elasticsearch** - chạy thử ở môi trường thật.
+
+**Tạo elastic network:**  
+
+  elastic network:  
+ 
+ ```bash
+  docker network create elastic
+ ```
+**Tạo elastic-server container:**  
+
+  Tạo elastic-server container:  
+ 
+ ```bash
+  docker run --name elastic-server --net elastic -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "network.host=0.0.0.0"  -e "xpack.security.enabled=true" -e "ELASTIC_PASSWORD=Provanhung77" -e "xpack.security.http.ssl.enabled=false" -t docker.elastic.co/elasticsearch/elasticsearch:8.11.3
+
+ ```
+
+  Lấy password của tài khoản kibana_system:  
+ 
+ ```bash
+docker exec -it elastic-server /usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana_system
+
+ ```
+ Nếu vào exec vào rồi hoặc dùng portainer thì chỉ cần 
+
+  ```bash
+/usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana_system
+
+ ```
+
+**Chạy kibna container:**  
+
+  Chạy kibna container:  
+ 
+ ```bash
+  docker run --name kib01 --net elastic -p 5601:5601 docker.elastic.co/kibana/kibana:8.11.3
+ ```
+Lưu ý: cần xem log của kibana và lấy code
+elastic_server là http://<containerName>:9200
+
+## Phần 3: Deploy ứng dụng .NET lên VPS:  
 
 **Để deploy được úng dụng .NET 7 lên chúng ta cần có các bước sau:**   
 
@@ -111,7 +159,7 @@ Lưu ý: nếu chạy ở local thì không cần `linux/amd64` cái này chỉ 
   docker run -p 44380:80 --name containerName vanhungdev/imageName:v.1.1 
  ```
 
-## Phần 2: Cấu hình reverse proxy, load Balance và Let's Encrypt SSL:  
+## Phần 4: Cấu hình reverse proxy, load Balance và Let's Encrypt SSL:  
  **Cài đặt nginx:**  
 
  ```bash
