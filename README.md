@@ -210,3 +210,9 @@ Lưu ý: nếu muốn chạy 2 host độc lập thì chạy lại server api gi
 	vanhungdev/imageName:v.1.1
 
  ```
+
+**Cấu hình reverse proxy:**  
+- Đang nguyên cứu
+
+**Load balancer:**  
+- Đang nguyên cứu
