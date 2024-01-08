@@ -33,12 +33,8 @@ Bloghung là một dự án chia sẽ kinh nghiệm được phát triển một
  ```bash
   docker network create elastic
  ```
-**Tạo elastic-server container:**  
- Bỏ limit size của elasticsearch server
- 
- ```bash
-sudo vim /etc/sysctl.conf
- ```
+**Cấu hình và tạo elastic-server container:**  
+
  Bỏ limit size của elasticsearch server
  
  ```bash
@@ -74,8 +70,6 @@ docker exec -it elastic-server /usr/share/elasticsearch/bin/elasticsearch-reset-
  ```
 
 **Chạy kibna container:**  
-
-  Chạy kibna container:  
  
  ```bash
   docker run --name kib01 --net elastic -p 5601:5601 docker.elastic.co/kibana/kibana:8.11.3
