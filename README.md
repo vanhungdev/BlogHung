@@ -20,15 +20,15 @@ Bloghung là một dự án chia sẽ kinh nghiệm được phát triển một
 
 **Để cài được Elasticsearch, kibna chúng ta cần cài theo các bước sau:**   
 
-1. **Tạo elastic network** -cần thiết để kết nối elasticsearch với kibna.
+1. **Tạo elastic network** - Cần thiết để kết nối elasticsearch với kibna.
 2. **Tạo elastic-server container** - Chúng ta sẽ chạy container elasticsearch trước.
-3. **Lấy password của tài khoản kibana_system** - cần lấy password của tk kibana_system vì kibana sẽ không kết nối với tk elastic.
-4. **Chạy kibna container** - chúng ta cần chạy kiban container.
-5. **Lấy code từ log kibana và kết nối với elasticsearch** - chạy thử ở môi trường thật.
+3. **Lấy password của tài khoản kibana_system** - Cần lấy password của tk kibana_system vì kibana sẽ không kết nối với tk elastic.
+4. **Chạy kibna container** - Chúng ta cần chạy kiban container.
+5. **Lấy code từ log kibana và kết nối với elasticsearch** - Chạy thử ở môi trường thật.
 
 **Tạo elastic network:**  
 
-  elastic network:  
+  Elastic network:  
  
  ```bash
   docker network create elastic
@@ -62,8 +62,8 @@ docker exec -it elastic-server /usr/share/elasticsearch/bin/elasticsearch-reset-
  ```bash
   docker run --name kib01 --net elastic -p 5601:5601 docker.elastic.co/kibana/kibana:8.11.3
  ```
-Lưu ý: cần xem log của kibana và lấy code
-elastic_server là http://<containerName>:9200
+Lưu ý: cần xem log của kibana và lấy code  
+elastic_server là http://<containerName>:9200 hoặc là ip của container là được
 
 ## Phần 3: Deploy ứng dụng .NET lên VPS:  
 
