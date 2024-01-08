@@ -111,8 +111,8 @@ Lưu ý: nếu chạy ở local thì không cần `linux/amd64` cái này chỉ 
   docker run -p 44380:80 --name containerName vanhungdev/imageName:v.1.1 
  ```
 
-## Phần 2: Cấu hình reverse proxy, load Balance và SSL:  
-  Cài đặt nginx:  
+## Phần 2: Cấu hình reverse proxy, load Balance và Let's Encrypt SSL:  
+ **Cài đặt nginx:**  
 
  ```bash
     docker run -d -p 80:80 -p 443:443 --name nginx-proxy --privileged=true \
@@ -125,8 +125,8 @@ Lưu ý: nếu chạy ở local thì không cần `linux/amd64` cái này chỉ 
 	-v /var/run/docker.sock:/tmp/docker.sock:ro \
 	jwilder/nginx-proxy
  ```
-
-  Tải chứng chỉ SSL cho nó:  
+ **Tải chứng chỉ Let's Encrypt SSL cho nó:**  
+  
 
  ```bash
    docker run -d --privileged=true \
@@ -138,8 +138,8 @@ Lưu ý: nếu chạy ở local thì không cần `linux/amd64` cái này chỉ 
  ```
 Chú ý: volumes-from cho đúng với server nginx
 
-  Chạy web lên:  
-
+  :  
+**Chạy web lên nhớ gắn các thông số chứng chỉ SSL:**  
  ```bash
    docker run -it -d --name containerName \
 	-e VIRTUAL_HOST="your-domain.vn" \
