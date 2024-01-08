@@ -69,100 +69,98 @@ elastic_server là http://<containerName>:9200 hoặc là ip của container là
 
 Tạo file docker Compose có tên docker-compose.yaml như sau:
  ```bash
-  version: '3'
-
+version: '3'
 services:
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    restart: always
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: hungnv165
-      MONGO_INITDB_ROOT_PASSWORD: Provanhung77
+ mongodb:
+   image: mongo:latest
+   container_name: mongodb
+   restart: always
+   ports:
+     - "27017:27017"
+   environment:
+     MONGO_INITDB_ROOT_USERNAME: hungnv165
+     MONGO_INITDB_ROOT_PASSWORD: Provanhung77
 
-  minio-server:
-    image: minio/minio:latest
-    container_name: minio-server
-    restart: always
-    ports:
-      - "9011:9000"
-      - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: hungnv165
-      MINIO_ROOT_PASSWORD: Provanhung77
-    command: server /data --console-address ":9001"
+ minio-server:
+   image: minio/minio:latest
+   container_name: minio-server
+   restart: always
+   ports:
+     - "9011:9000"
+     - "9001:9001"
+   environment:
+     MINIO_ROOT_USER: hungnv165
+     MINIO_ROOT_PASSWORD: Provanhung77
+   command: server /data --console-address ":9001"
 
-  portainer:
-    image: portainer/portainer-ce
-    container_name: portainer
-    restart: always
-    ports:
-      - "9000:9000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
+ portainer:
+   image: portainer/portainer-ce
+   container_name: portainer
+   restart: always
+   ports:
+     - "9000:9000"
+   volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+     - portainer_data:/data
 
-  sql-server-container:
-    image: mcr.microsoft.com/mssql/server:2017-latest
-    container_name: sql-server-container
-    restart: always
-    ports:
-      - "1433:1433"
-    environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: "Provanhung77@@"
+ sql-server-container:
+   image: mcr.microsoft.com/mssql/server:2017-latest
+   container_name: sql-server-container
+   restart: always
+   ports:
+     - "1433:1433"
+   environment:
+     ACCEPT_EULA: "Y"
+     SA_PASSWORD: "Provanhung77"
 
-  redis:
-    image: redis:latest
-    container_name: redis
-    restart: always
-    ports:
-      - "6379:6379"
-    environment:
-      REDIS_PASSWORD: Provanhung77@@
-      
-  zookeeper:
-    container_name: zookeeper
-    image: wurstmeister/zookeeper
-    ports:
-      - "2181:2181"
-    networks:
-      - kafka-net
-
-  kafka:
-    container_name: kafka
-    image: wurstmeister/kafka
-    ports:
-      - "9092:9092"
-      - "9093:9093" 
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092 
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
-      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-    networks:
-      - kafka-net
-
-  kafdrop:
-    container_name: kafdrop
-    image: obsidiandynamics/kafdrop
-    ports:
-      - "9091:9000"
-    environment:
-      KAFKA_BROKERCONNECT: kafka:9093
-      JVM_OPTS: "-Xms32M -Xmx64M"
-    networks:
+ redis:
+   image: redis:latest
+   container_name: redis
+   restart: always
+   ports:
+     - "6379:6379"
+   environment:
+     REDIS_PASSWORD: Provanhung77
+     
+ zookeeper:
+   container_name: zookeeper
+   image: wurstmeister/zookeeper
+   ports:
+     - "2181:2181"
+   networks:
      - kafka-net
 
+ kafka:
+   container_name: kafka
+   image: wurstmeister/kafka
+   ports:
+     - "9092:9092"
+     - "9093:9093" 
+   environment:
+     KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092 
+     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+     KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
+     KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+   networks:
+     - kafka-net
 
+ kafdrop:
+   container_name: kafdrop
+   image: obsidiandynamics/kafdrop
+   ports:
+     - "9091:9000"
+   environment:
+     KAFKA_BROKERCONNECT: kafka:9093
+     JVM_OPTS: "-Xms32M -Xmx64M"
+   networks:
+    - kafka-net
+    
 volumes:
-  portainer_data:
+ portainer_data:
 networks:
-  kafka-net:
-    driver: bridge
+ kafka-net:
+   driver: bridge
 
  ```
 
