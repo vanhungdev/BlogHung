@@ -2,8 +2,8 @@
 Bloghung là một dự án chia sẽ kinh nghiệm được phát triển một cách chuyên nghiệp bởi H.
 
 
-**Thông tin Broker Kafka đã có sẵn trên VPS có thể sử dụng.**   
-**Lưu ý:** ----------------- 
+**Thông tin VPS đã có sẵn có thể sử dụng.**   
+**Lưu ý:** Nếu dùng của google thì 3 tháng hết hạng cần chuẩn bị phương án backup dữ liệu để chuyển qua server khác. 
 
 1. MapHost by pass proxy (mạng công ty):  
     ```bash
@@ -43,6 +43,7 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 
 # Copy csproj và restore các phụ thuộc
+# Lưu ý phải copy đầy đủ các project con các tầng Application, Infrastructure nếu có
 COPY ["BlogHung/BlogHung.csproj", "BlogHung/"]
 COPY ["BlogHung.Application/BlogHung.Application.csproj", "BlogHung.Application/"]
 COPY ["BlogHung.Infrastructure/BlogHung.Infrastructure.csproj", "BlogHung.Infrastructure/"]
@@ -67,22 +68,45 @@ ENTRYPOINT ["dotnet", "BlogHung.dll"]
 
 ```
 
- **Chạy Docker Compose:**  
+ **Chạy Docker file:**  
   **Lưu ý:** Để trình chạy docker file không gặp lỗi thì chú ý các mục sau:  
 
-1. Chú ý `port` đã bị chiếm trong hệ thống chưa: `2181`, `9092`, `9091`.  
-2. Chú ý `container_name` đã có chưa: `zookeeper`, `kafka`, `kafdrop`.  
-3. Chú ý `networks` đã có chưa: `kafka-net`.  
-4. Chú ý cấu hình các `environment` (biến môi trường) phù hợp.  
-5. Chú ý nếu gặp lỗi `The requested image's platform` thì điều chỉnh `image` lại cho phù hợp với platform của bạn.  
+1. Chú ý `Cấu trúc thư mục` .  
+2. Chú ý `COPY và  restore` đầy đủ các project.  
+3. Chú ý `base Image SDK, Runtime` đã đúng version hay chưa.  
 
-Mở terminal và di chuyển đến thư mục chứa tệp docker-compose.yml, sau đó chạy lệnh:  
+Mở terminal và di chuyển đến thư mục chứa tệp Dockerfile, sau đó chạy lệnh:  
  ```bash
-  docker-compose up -d
+  docker build --platform linux/amd64 -t imageName --no-cache .
  ```
+Lưu ý: nếu chạy ở local thì không cần `linux/amd64` cái này chỉ để deploy lên VPS Centos
+
  
-  Truy cập Kafdrop:  
+  Run container:  
  
  ```bash
-  http://localhost:9091
+  docker run -p 44388:80 --name containerName  imageName
+ ```
+
+  Login vào docker hub:  
+ 
+ ```bash
+  dokcer login
+ ```
+
+  Đánh tag để đưa lên docker hub:  
+ 
+ ```bash
+  docker tag imageName:latest vanhungdev/imageName:v.1.1
+ ```
+
+  Đẩy image lên docker hub:  
+ 
+ ```bash
+  docker push vanhungdev/imageName:v.1.1
+ ```
+  Run container trên môi trường VPS Centos:  
+ 
+ ```bash
+  docker run -p 44380:80 --name containerName vanhungdev/imageName:v.1.1 
  ```
