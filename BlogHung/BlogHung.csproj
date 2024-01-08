@@ -23,10 +23,14 @@
   <ItemGroup>
     <Folder Include="ErrorLogs\" />
     <Folder Include="wwwroot\Public\js\" />
+    <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Remove="wwwroot\Public\css\style.css" />
     <Content Remove="wwwroot\Public\js\" />
+    <Content Remove="wwwroot\css\" />
+    <Content Remove="wwwroot\js\" />
   </ItemGroup>
 </Project>
