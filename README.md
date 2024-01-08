@@ -138,7 +138,6 @@ Lưu ý: nếu chạy ở local thì không cần `linux/amd64` cái này chỉ 
  ```
 Chú ý: volumes-from cho đúng với server nginx
 
-  :  
 **Chạy web lên nhớ gắn các thông số chứng chỉ SSL:**  
  ```bash
    docker run -it -d --name containerName \
@@ -152,7 +151,7 @@ Chú ý: volumes-from cho đúng với server nginx
 
 Lưu ý: nếu muốn chạy 2 host độc lập thì chạy lại server api giống nhau đổi VIRTUAL_HOST và containerName.
 
-  Chạy web số 2 lên:  
+**Cấu hình cho web số 2:**  
 
  ```bash
    docker run -it -d --name containerName-2 \
