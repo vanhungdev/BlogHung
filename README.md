@@ -151,3 +151,15 @@ Chú ý: volumes-from cho đúng với server nginx
  ```
 
 Lưu ý: nếu muốn chạy 2 host độc lập thì chạy lại server api giống nhau đổi VIRTUAL_HOST và containerName.
+
+  Chạy web số 2 lên:  
+
+ ```bash
+   docker run -it -d --name containerName-2 \
+	-e VIRTUAL_HOST="your-domain-2.vn" \
+	-e VIRTUAL_PORT=80 \
+	-e LETSENCRYPT_HOST="your-domain-2.vn" \
+	-e LETSENCRYPT_EMAIL="vanhungdev@fpt.com.vn" \
+	vanhungdev/imageName:v.1.1
+
+ ```
