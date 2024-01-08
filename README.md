@@ -41,7 +41,6 @@ Bloghung là một dự án chia sẽ kinh nghiệm được phát triển một
 sudo vim /etc/sysctl.conf
  ```
 Chèn dòng cấu hình `vm.max_map_count=262144` bằng cách nhập i để chuyển vào chế độ chèn, sau đó nhập dòng cấu hình.  
-chay lenh sau khi cai xong.
 
 Sau khi cài xong chạy lệnh
  
